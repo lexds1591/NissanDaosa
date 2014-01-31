@@ -23,7 +23,7 @@ public class MainActivity extends Activity {
 	 private String imageHttpAddress = "http://gabomarin26.mipropia.com/td_informatica/images/0eocinas.jpg";
 	 static private String dominio = "http://www.nissandaosa.com";
 	 private ImageView img;
-	 static private String ruta = "/mnt/emmc/promo.jpg";
+	 static private String ruta = "/promo.jpg";
 	 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
