@@ -20,7 +20,7 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	private Bitmap loadedImage;
-	 static private String imageHttpAddress = "http://www.nissandaosa.com";
+	 private String imageHttpAddress = "http://jonsegador.com/wp-content/apezz.png";
 	 static private String dominio = "http://www.nissandaosa.com";
 	 private ImageView img;
 	 static private String ruta = "/mnt/emmc/promo.jpg";
@@ -67,7 +67,6 @@ public class MainActivity extends Activity {
            loadedImage.compress(Bitmap.CompressFormat.JPEG, 90, out);
            out.flush();
            out.close();
-           
            
        } catch (IOException e) {
            Toast.makeText(getApplicationContext(), "Error cargando la imagen: "+e.getMessage(), Toast.LENGTH_LONG).show();
