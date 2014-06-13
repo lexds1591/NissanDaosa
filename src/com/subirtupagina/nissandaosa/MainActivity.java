@@ -1,84 +1,76 @@
 package com.subirtupagina.nissandaosa;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
-import android.net.Uri;
-import android.os.Bundle;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
-import android.widget.ImageView;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
 import android.widget.Toast;
 
-public class MainActivity extends Activity {
-	private Bitmap loadedImage;
-	 private String imageHttpAddress = "http://gabomarin26.mipropia.com/td_informatica/images/0eocinas.jpg";
-	 static private String dominio = "http://www.nissandaosa.com";
-	 private ImageView img;
-	 static private String ruta = "/promo.jpg";
-	 
+import com.subirtupagina.nissandaosa.R;
+import com.subirtupagina.nissandaosa.adapters.AdapterLVMain;
+import com.subirtupagina.nissandaosa.application.AplicacionNissanDaosa;
+
+public class MainActivity extends Activity implements OnItemClickListener {
+	private ListView lvPublicaciones;
+	private AdapterLVMain lvAdapter;
+
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		
-		//no rotar pantalla
-		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-		
-		//eliminar la barra de titulo
-	    requestWindowFeature(Window.FEATURE_NO_TITLE);
-	    
-		super.onCreate(savedInstanceState);
+		// delete bar title
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		super.onCreate(savedInstanceState);	
 		setContentView(R.layout.activity_main);
 		
-		img = (ImageView)findViewById(R.id.imageView1);
-	    downloadFile(imageHttpAddress);
-	 }
-	 
-	 void downloadFile(String imageHttpAddress) {
-       URL imageUrl = null;
-       try {
-           imageUrl = new URL(imageHttpAddress);
-           HttpURLConnection conn = (HttpURLConnection) imageUrl.openConnection();
-           conn.connect();            
-           
-			loadedImage = BitmapFactory.decodeStream(conn.getInputStream());
-			img.setImageBitmap(loadedImage);
-            
-			//guardar la imagen en la memoria interna
-			InputStream is = conn.getInputStream();
-           FileOutputStream out = new FileOutputStream(ruta);
-           
-           byte[] buffer = new byte[1024];
-           int len;
-           while((len  = is.read(buffer))>0){
-               out.write(buffer, 0, len );
-           }
-           is.close();
-           
-           
-           //guardar la imagen en la ruta y en el formato especificado
-           loadedImage.compress(Bitmap.CompressFormat.JPEG, 90, out);
-           out.flush();
-           out.close();
-           
-       } catch (IOException e) {
-           Toast.makeText(getApplicationContext(), "Error cargando la imagen: "+e.getMessage(), Toast.LENGTH_LONG).show();
-           e.printStackTrace();
-       }
-			
-	}
-	public void abrirPagina(View view){
-		Intent intent = new Intent(Intent.ACTION_VIEW);
-		intent.setData(Uri.parse(dominio));
-		this.startActivity(intent);
-	}
+	
+		lvAdapter = new AdapterLVMain(this);
+		lvPublicaciones = (ListView) findViewById(R.id.lvPublicaciones);
+		lvPublicaciones.setAdapter(lvAdapter);
+		lvPublicaciones.setOnItemClickListener(this);
+       	//prueba de conexion a internet
+		pruebaInternet();
 
+	}
+	public void hangmanActivity(View view){
+		Intent intent = new Intent(this,Intro.class);
+		startActivity(intent);
+	}
+	private void pruebaInternet() {
+	
+		ConnectivityManager cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo netInfo = cm.getActiveNetworkInfo();
+		if( netInfo != null && netInfo.isConnectedOrConnecting()){      		
+			((AplicacionNissanDaosa) getApplication())
+					.updatePublicaciones(lvAdapter);
+	       	}else {
+	       		Toast toast1 = Toast.makeText(getApplicationContext(), "No tienes acceso a Internet", Toast.LENGTH_LONG); 
+	       	        toast1.show();
+			}
+		
+	}
+	
+	
 
+	@Override
+	public void onItemClick(AdapterView<?> adapter, View view, int position,
+			long id) {
+		// Recuperamos el link y la imagen de la publicación seleccionada.
+		String link = lvAdapter.getItem(position).getLink();	
+		String descripcion = lvAdapter.getItem(position).getDescription();
+				
+		//Inicia segundo activity
+		Intent i = new Intent(this,Secciones.class);
+		i.putExtra("urlImagen", link);
+		i.putExtra("url", descripcion);
+		startActivity(i);
+		
+
+	}
 }

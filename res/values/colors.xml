@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="LayoutBackground">#AAAAAA</color>
+    <color name="ListViewBackground">#FFFFFF</color>
+    
+        <color name="white">#FFFFFF</color>
+        <color name="red">#FC0D0D</color>
+        <color name="yellow">#EDF039</color>
+        <color name="black">#000000</color>
+        <color name="green">#32ED3E</color>
+        <color name="gray">#242222</color>
+        <color name="blue">#2B90DE</color>
+        <color name= "gray2">#E6E6E6</color>
+        <color name="separacion_listView">#C0D6D4</color>
+</resources>
