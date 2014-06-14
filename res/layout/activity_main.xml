@@ -34,6 +34,7 @@
         android:paddingTop="15dp"
         android:text="@string/Boton"
         android:textColorHint="@color/black"
+        android:textColor="@color/white"
         android:textSize="30sp"
         android:textAlignment="center"
         android:background="@drawable/fondo_boton"
